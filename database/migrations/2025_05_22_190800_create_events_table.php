@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('thumbnail')->nullable();
             $table->string('title');
             $table->text('description');
-            $table->integer('location_x');
-            $table->integer('location_y');
+            $table->float('location_x');
+            $table->float('location_y');
             $table->date('date');
             $table->enum('status', ['upcoming', 'happened', 'cancelled']);
             $table->timestamps();

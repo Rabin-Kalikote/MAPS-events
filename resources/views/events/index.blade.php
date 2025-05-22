@@ -68,10 +68,10 @@
     </div>
     <h3 class="mt-5 mb-3 text-center fw-bold" style="color:#533860;">College Map</h3>
     <div class="d-flex justify-content-center">
-        <div style="position:relative;width:600px;height:400px;background:#eee;border-radius:1.5rem;box-shadow:0 4px 24px #53386022;overflow:hidden;">
-            <img src="/images/college_map.png" alt="College Map" style="width:100%;height:100%;object-fit:cover;">
-            @foreach($events->flatten() as $event)
-                <div style="position:absolute;left:{{ $event->location_x }}px;top:{{ $event->location_y }}px;transform:translate(-50%,-100%);">
+        <div style="position:relative;width:100vw;height:60vw;max-width:600px;max-height:400px;background:#eee;border-radius:1.5rem;box-shadow:0 4px 24px #53386022;overflow:hidden;">
+            <img src="/images/college_map.png" alt="College Map" style="width:100%;height:100%;">
+            @foreach($events->collapse() as $event)
+                <div style="position:absolute;left:{{ $event->location_x }}%;top:{{ $event->location_y }}%;transform:translate(-50%,-100%);">
                     <span title="{{ $event->title }}" style="color:#ffe42a;font-size:2em;text-shadow:1px 1px 4px #533860;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ $event->title }}">📍</span>
                 </div>
             @endforeach
