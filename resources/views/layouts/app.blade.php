@@ -50,6 +50,14 @@
     <main>
         @yield('content')
     </main>
+    <footer class="text-center py-4 mt-5" style="background: #533860; color: #fff; border-top: 3px solid #ffe42a;">
+        <div>
+            <a href="https://www.collegeofidaho.edu" target="_blank" style="color: #ffe42a; font-weight: bold; text-decoration: underline;">College of Idaho</a>
+        </div>
+        <div class="mt-2" style="font-size: 1rem;">
+            MAPS Events app built by Rabin Kalikote and Shubham Shrestha
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {

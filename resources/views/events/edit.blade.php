@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>Edit Event</h2>
-    <form method="POST" action="{{ route('events.update', $event->id) }}">
+    <form method="POST" action="{{ route('events.update', $event->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="mb-3">
@@ -19,16 +19,29 @@
             <input type="text" name="thumbnail" class="form-control" value="{{ old('thumbnail', $event->thumbnail) }}">
         </div>
         <div class="mb-3">
+            <label class="form-label">Or Upload Image</label>
+            <input type="file" name="thumbnail_upload" class="form-control" accept="image/*">
+            @if($event->thumbnail)
+                <div class="mt-2">
+                    <img src="{{ $event->thumbnail }}" alt="Current Thumbnail" style="max-width:120px;max-height:80px;">
+                    <span class="text-muted ms-2">Current</span>
+                </div>
+            @endif
+        </div>
+        <div class="mb-3">
             <label class="form-label">Date</label>
             <input type="date" name="date" class="form-control" required value="{{ old('date', $event->date) }}">
         </div>
         <div class="mb-3">
-            <label class="form-label">Location X</label>
-            <input type="number" name="location_x" class="form-control" required value="{{ old('location_x', $event->location_x) }}">
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Location Y</label>
-            <input type="number" name="location_y" class="form-control" required value="{{ old('location_y', $event->location_y) }}">
+            <label class="form-label">Event Location (click or drag marker on map)</label>
+            <div id="map-container" style="position:relative;width:600px;height:400px;background:#eee;">
+                <img src="/images/college_map.png" alt="College Map" style="width:100%;height:100%;">
+                <div id="marker" style="position:absolute;left:{{ old('location_x', $event->location_x) }}px;top:{{ old('location_y', $event->location_y) }}px;cursor:pointer;transform:translate(-50%,-100%);font-size:2em;user-select:none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Drag or click to set event location">
+                    📍
+                </div>
+            </div>
+            <input type="hidden" name="location_x" id="location_x" value="{{ old('location_x', $event->location_x) }}">
+            <input type="hidden" name="location_y" id="location_y" value="{{ old('location_y', $event->location_y) }}">
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>
@@ -46,4 +59,45 @@
         <a href="{{ route('events.index') }}" class="btn btn-secondary">Cancel</a>
     </form>
 </div>
+<script>
+const marker = document.getElementById('marker');
+const mapContainer = document.getElementById('map-container');
+let isDragging = false;
+
+marker.addEventListener('mousedown', function(e) {
+    isDragging = true;
+});
+document.addEventListener('mouseup', function(e) {
+    isDragging = false;
+});
+document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    const rect = mapContainer.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    x = Math.max(0, Math.min(rect.width, x));
+    y = Math.max(0, Math.min(rect.height, y));
+    marker.style.left = x + 'px';
+    marker.style.top = y + 'px';
+    document.getElementById('location_x').value = Math.round(x);
+    document.getElementById('location_y').value = Math.round(y);
+});
+mapContainer.addEventListener('click', function(e) {
+    const rect = mapContainer.getBoundingClientRect();
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+    x = Math.max(0, Math.min(rect.width, x));
+    y = Math.max(0, Math.min(rect.height, y));
+    marker.style.left = x + 'px';
+    marker.style.top = y + 'px';
+    document.getElementById('location_x').value = Math.round(x);
+    document.getElementById('location_y').value = Math.round(y);
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+});
+</script>
 @endsection
