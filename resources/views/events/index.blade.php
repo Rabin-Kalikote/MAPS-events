@@ -62,7 +62,7 @@
     </div>
     <h3 class="mt-5">College Map</h3>
     <div style="position:relative;width:600px;height:400px;background:#eee;">
-        <img src="/images/college_map.png" alt="College Map" style="width:100%;height:100%;">
+        <img src="/images/college_map.png" alt="College Map" style="width:100%;height:100%;margin-left:auto;margin-right:auto;">
         @foreach($events->flatten() as $event)
             <div style="position:absolute;left:{{ $event->location_x }}px;top:{{ $event->location_y }}px;transform:translate(-50%,-100%);">
                 <span title="{{ $event->title }}" style="color:red;font-size:2em;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="{{ $event->title }}">📍</span>
