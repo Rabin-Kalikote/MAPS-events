@@ -27,14 +27,14 @@
         </div>
         <div class="mb-3">
             <label class="form-label">Event Location (click or drag marker on map)</label>
-            <div id="map-container" style="position:relative;width:600px;height:400px;background:#eee;">
+            <div id="map-container" style="position:relative;width:100vw;height:60vw;max-width:600px;max-height:400px;background:#eee;">
                 <img src="/images/college_map.png" alt="College Map" style="width:100%;height:100%;">
-                <div id="marker" style="position:absolute;left:300px;top:200px;cursor:pointer;transform:translate(-50%,-100%);font-size:2em;user-select:none;">
+                <div id="marker" style="position:absolute;left:{{ old('location_x', 50) }}%;top:{{ old('location_y', 50) }}%;cursor:pointer;transform:translate(-50%,-100%);font-size:2em;user-select:none;" data-bs-toggle="tooltip" data-bs-placement="top" title="Drag or click to set event location">
                     📍
                 </div>
             </div>
-            <input type="hidden" name="location_x" id="location_x" value="300">
-            <input type="hidden" name="location_y" id="location_y" value="200">
+            <input type="hidden" name="location_x" id="location_x" value="{{ old('location_x', 50) }}">
+            <input type="hidden" name="location_y" id="location_y" value="{{ old('location_y', 50) }}">
         </div>
         <div class="mb-3">
             <label class="form-label">Status</label>
@@ -53,6 +53,13 @@ const marker = document.getElementById('marker');
 const mapContainer = document.getElementById('map-container');
 let isDragging = false;
 
+function setMarkerPosition(xPercent, yPercent) {
+    marker.style.left = xPercent + '%';
+    marker.style.top = yPercent + '%';
+    document.getElementById('location_x').value = xPercent;
+    document.getElementById('location_y').value = yPercent;
+}
+
 marker.addEventListener('mousedown', function(e) {
     isDragging = true;
 });
@@ -62,27 +69,25 @@ document.addEventListener('mouseup', function(e) {
 document.addEventListener('mousemove', function(e) {
     if (!isDragging) return;
     const rect = mapContainer.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
-    // Clamp to map bounds
-    x = Math.max(0, Math.min(rect.width, x));
-    y = Math.max(0, Math.min(rect.height, y));
-    marker.style.left = x + 'px';
-    marker.style.top = y + 'px';
-    document.getElementById('location_x').value = Math.round(x);
-    document.getElementById('location_y').value = Math.round(y);
+    let x = ((e.clientX - rect.left) / rect.width) * 100;
+    let y = ((e.clientY - rect.top) / rect.height) * 100;
+    x = Math.max(0, Math.min(100, x));
+    y = Math.max(0, Math.min(100, y));
+    setMarkerPosition(Math.round(x * 100) / 100, Math.round(y * 100) / 100);
 });
-// Allow click to move marker
 mapContainer.addEventListener('click', function(e) {
     const rect = mapContainer.getBoundingClientRect();
-    let x = e.clientX - rect.left;
-    let y = e.clientY - rect.top;
-    x = Math.max(0, Math.min(rect.width, x));
-    y = Math.max(0, Math.min(rect.height, y));
-    marker.style.left = x + 'px';
-    marker.style.top = y + 'px';
-    document.getElementById('location_x').value = Math.round(x);
-    document.getElementById('location_y').value = Math.round(y);
+    let x = ((e.clientX - rect.left) / rect.width) * 100;
+    let y = ((e.clientY - rect.top) / rect.height) * 100;
+    x = Math.max(0, Math.min(100, x));
+    y = Math.max(0, Math.min(100, y));
+    setMarkerPosition(Math.round(x * 100) / 100, Math.round(y * 100) / 100);
+});
+document.addEventListener('DOMContentLoaded', function() {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
+        new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 });
 </script>
 @endsection
