@@ -1,5 +1,5 @@
 @import 'tailwindcss';
-@import 'bootstrap';
+@import 'bootstrap/dist/css/bootstrap.min.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -21,70 +21,51 @@ body {
     color: #2d223a;
 }
 
-.navbar, .nav-tabs {
+
+.custom-navbar {
     background: var(--theme-color) !important;
-}
-
-.navbar .navbar-brand, .nav-tabs .nav-link {
-    color: #fff !important;
-}
-
-.nav-tabs .nav-link.active {
-    background: var(--theme-color) !important;
-    color: var(--secondary-color) !important;
-    border-color: var(--theme-color) var(--theme-color) #fff;
-}
-
-.btn-primary {
-    background: var(--theme-color) !important;
-    border-color: var(--theme-color) !important;
-}
-
-.btn-primary:hover, .btn-primary:focus {
-    background: #3d2947 !important;
-    border-color: #3d2947 !important;
-}
-
-.btn-success {
-    background: var(--secondary-color) !important;
-    border-color: var(--secondary-color) !important;
-    color: var(--theme-color) !important;
-}
-
-.btn-success:hover, .btn-success:focus {
-    background: #ffe42a !important;
-    border-color: #ffe42a !important;
-    color: #2d223a !important;
-}
-
-.card {
-    border: 1px solid #e0d6f5;
-    box-shadow: 0 2px 8px rgba(83,56,96,0.04);
-}
-
-.card-title {
-    color: var(--theme-color);
-}
-
-.navbar {
     border-bottom: 3px solid var(--secondary-color);
+    box-shadow: 0 2px 8px #53386022;
 }
-
-a {
+.navbar-brand {
+    color: #fff !important;
+    font-size: 1.7rem;
+    letter-spacing: 1px;
+}
+.navbar-search-form {
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: center;
+}
+.custom-search-input {
+    border-radius: 2rem 0 0 2rem;
+    border: 2px solid var(--secondary-color);
+    background: #fffbe6;
     color: var(--theme-color);
+    font-weight: 500;
+}
+.custom-search-btn {
+    border-radius: 0 2rem 2rem 0;
+    background: var(--secondary-color) !important;
+    color: var(--theme-color) !important;
+    border: 2px solid var(--secondary-color);
+    font-weight: 600;
+}
+.custom-add-btn {
+    background: var(--theme-color) !important;
+    color: #fff !important;
+    border-radius: 2rem;
+    font-weight: 600;
+    box-shadow: 0 2px 8px #53386022;
+    border: 2px solid var(--theme-color);
+    transition: background 0.2s, color 0.2s;
+}
+.custom-add-btn:hover {
+    background: var(--secondary-color) !important;
+    color: var(--theme-color) !important;
+    border: 2px solid var(--secondary-color);
 }
 
-a:hover {
-    color: var(--secondary-color);
-}
-
-.form-label {
-    color: var(--theme-color);
-}
-
-input[type="password"] {
-    border-color: var(--secondary-color);
-}
 
 #marker {
     color: var(--secondary-color) !important;

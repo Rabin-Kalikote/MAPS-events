@@ -23,13 +23,10 @@
                                 <h5 class="card-title">{{ $event->title }}</h5>
                                 <p class="card-text">{{ $event->description }}</p>
                                 <p class="card-text"><small>{{ $event->date }}</small></p>
-                                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                <form action="{{ route('events.destroy', $event->id) }}" method="POST" style="display:inline-block;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="password" name="admin_password" placeholder="Admin Password" style="width:120px;" required>
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
+                                <div class="admin-actions" style="display:none;">
+                                    <a href="{{ route('events.edit', $event->id) }}" class="btn btn-sm btn-warning">Edit</a>
+                                    <button type="button" class="btn btn-sm btn-danger ms-1" onclick="showDeleteModal({{ $event->id }})">Delete</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -39,6 +36,29 @@
                 </div>
             </div>
         @endforeach
+    </div>
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="deleteForm" method="POST">
+            @csrf
+            @method('DELETE')
+            <div class="modal-body">
+                <p>Enter admin password to confirm deletion:</p>
+                <input type="password" name="admin_password" class="form-control" required>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
     <h3 class="mt-5">College Map</h3>
     <div style="position:relative;width:600px;height:400px;background:#eee;">
@@ -57,5 +77,24 @@ document.addEventListener('DOMContentLoaded', function() {
         new bootstrap.Tooltip(tooltipTriggerEl);
     });
 });
+
+function updateAdminActions() {
+    const isAdmin = localStorage.getItem('maps_admin') === '1';
+    document.querySelectorAll('.admin-actions').forEach(el => {
+        el.style.display = isAdmin ? '' : 'none';
+    });
+}
+window.addEventListener('maps_admin_change', updateAdminActions);
+document.addEventListener('DOMContentLoaded', function() {
+    updateAdminActions();
+});
+
+window.showDeleteModal = function(eventId) {
+    const form = document.getElementById('deleteForm');
+    form.action = `/events/${eventId}`;
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    form.reset();
+    modal.show();
+};
 </script>
 @endsection
