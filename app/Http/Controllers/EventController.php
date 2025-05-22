@@ -40,8 +40,8 @@ class EventController extends Controller
             'thumbnail_upload' => 'nullable|image|max:2048',
             'title' => 'required|string',
             'description' => 'required|string',
-            'location_x' => 'required|integer',
-            'location_y' => 'required|integer',
+            'location_x' => 'required|numeric|min:0|max:100',
+            'location_y' => 'required|numeric|min:0|max:100',
             'date' => 'required|date',
             'status' => 'required|in:upcoming,happened,cancelled',
         ]);
@@ -84,14 +84,23 @@ class EventController extends Controller
         }
         $validated = $request->validate([
             'thumbnail' => 'nullable|string',
+            'thumbnail_upload' => 'nullable|image|max:2048',
             'title' => 'required|string',
             'description' => 'required|string',
-            'location_x' => 'required|integer',
-            'location_y' => 'required|integer',
+            'location_x' => 'required|numeric|min:0|max:100',
+            'location_y' => 'required|numeric|min:0|max:100',
             'date' => 'required|date',
             'status' => 'required|in:upcoming,happened,cancelled',
         ]);
+
         $event = Event::findOrFail($id);
+
+        // Handle file upload if present
+        if ($request->hasFile('thumbnail_upload')) {
+            $path = $request->file('thumbnail_upload')->store('thumbnails', 'public');
+            $validated['thumbnail'] = '/storage/' . $path;
+        }
+
         $event->update($validated);
         return redirect()->route('events.index')->with('success', 'Event updated successfully.');
     }

@@ -9,21 +9,23 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4 custom-navbar">
-        <div class="container-fluid justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
-                <button class="btn btn-outline-light me-3 fw-bold" id="adminSignInBtn" data-bs-toggle="modal" data-bs-target="#adminSignInModal">
+        <div class="container justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold" href="{{ route('events.index') }}">MAPS Events</a>
+            <div class="d-flex align-items-center ms-auto" style="gap:0.5rem;">
+                <form method="GET" action="{{ route('events.index') }}" class="d-flex align-items-center mb-0" style="gap:0.5rem;">
+                    <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search events..." class="form-control" style="width:200px; border-radius:0.5rem;">
+                    <button type="submit" class="btn btn-outline-light fw-bold" style="border-radius:0.5rem;">Search</button>
+                </form>
+                <a href="{{ route('events.create') }}" class="btn btn-outline-light fw-bold" id="addEventBtn" style="border-radius:0.5rem;">
+                    <i class="bi bi-plus-circle"></i> Add Event
+                </a>
+                <button class="btn btn-outline-light fw-bold" id="adminSignInBtn" data-bs-toggle="modal" data-bs-target="#adminSignInModal" style="border-radius:0.5rem;">
                     <i class="bi bi-person-lock"></i> Admin Sign In
                 </button>
-                <button class="btn btn-outline-warning me-3 fw-bold d-none" id="adminSignOutBtn">
+                <button class="btn btn-outline-warning fw-bold d-none" id="adminSignOutBtn" style="border-radius:0.5rem;">
                     <i class="bi bi-box-arrow-right"></i> Admin Sign Out
                 </button>
-                <a class="navbar-brand fw-bold" href="{{ route('events.index') }}">MAPS Events</a>
             </div>
-            <form method="GET" action="{{ route('events.index') }}" class="d-flex mx-auto navbar-search-form">
-                <input type="text" name="search" value="{{ $search ?? '' }}" placeholder="Search events..." class="form-control custom-search-input" style="width:300px;">
-                <button type="submit" class="btn btn-primary custom-search-btn">Search</button>
-            </form>
-            <a href="{{ route('events.create') }}" class="btn btn-success ms-auto custom-add-btn">+ Add Event</a>
         </div>
     </nav>
 
@@ -50,6 +52,14 @@
     <main>
         @yield('content')
     </main>
+    <footer class="text-center py-4 mt-5" style="background: #533860; color: #fff; border-top: 3px solid #ffe42a;">
+        <div>
+            <a href="https://www.collegeofidaho.edu" target="_blank" style="color: #ffe42a; font-weight: bold; text-decoration: underline;">College of Idaho</a>
+        </div>
+        <div class="mt-2" style="font-size: 1rem;">
+            MAPS Events app built by Rabin Kalikote and Shubham Shrestha
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
